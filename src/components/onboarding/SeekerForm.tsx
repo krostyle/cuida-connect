@@ -44,13 +44,22 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>
 
-export function SeekerForm() {
+interface SeekerFormProps {
+  defaultFirstName?: string
+  defaultLastName?: string
+}
+
+export function SeekerForm({ defaultFirstName = "", defaultLastName = "" }: SeekerFormProps) {
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { forSelf: true },
+    defaultValues: {
+      forSelf: true,
+      firstName: defaultFirstName,
+      lastName: defaultLastName,
+    },
   })
 
   const forSelf = form.watch("forSelf")

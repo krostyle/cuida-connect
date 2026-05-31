@@ -53,13 +53,22 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>
 
-export function CaregiverForm() {
+interface CaregiverFormProps {
+  defaultFirstName?: string
+  defaultLastName?: string
+}
+
+export function CaregiverForm({ defaultFirstName = "", defaultLastName = "" }: CaregiverFormProps) {
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { profileType: "EXPERIENCED" },
+    defaultValues: {
+      profileType: "EXPERIENCED",
+      firstName: defaultFirstName,
+      lastName: defaultLastName,
+    },
   })
 
   const profileType = form.watch("profileType")

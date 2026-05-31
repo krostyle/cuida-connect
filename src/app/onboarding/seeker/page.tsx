@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server"
+import { auth, currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
@@ -11,7 +11,10 @@ export default async function OnboardingSeekerPage() {
   const { userId: clerkId } = await auth()
   if (!clerkId) redirect("/sign-in")
 
-  const user = await getUserWithProfile(clerkId)
+  const [user, clerkUser] = await Promise.all([
+    getUserWithProfile(clerkId),
+    currentUser(),
+  ])
 
   if (!user) redirect("/onboarding")
   if (user.caregiverProfile) redirect("/dashboard")
@@ -19,7 +22,6 @@ export default async function OnboardingSeekerPage() {
 
   return (
     <div className="space-y-6">
-      {/* Botón volver — prominente y mobile-first */}
       <Link
         href="/onboarding"
         className={cn(
@@ -43,7 +45,10 @@ export default async function OnboardingSeekerPage() {
         </p>
       </div>
 
-      <SeekerForm />
+      <SeekerForm
+        defaultFirstName={clerkUser?.firstName ?? ""}
+        defaultLastName={clerkUser?.lastName ?? ""}
+      />
     </div>
   )
 }
