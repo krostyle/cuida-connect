@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
+import { Spinner } from "@/components/ui/spinner"
 
 const AVAILABILITY_LABELS: Record<string, string> = {
   FULL_TIME: "Jornada completa",
@@ -110,7 +111,7 @@ export function CaregiverForm() {
                   >
                     <label
                       htmlFor="experienced"
-                      className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:border-primary/50 transition-colors has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5"
+                      className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:border-primary/50 transition-colors has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5"
                     >
                       <RadioGroupItem value="EXPERIENCED" id="experienced" />
                       <div>
@@ -122,7 +123,7 @@ export function CaregiverForm() {
                     </label>
                     <label
                       htmlFor="professional"
-                      className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:border-primary/50 transition-colors has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5"
+                      className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:border-primary/50 transition-colors has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5"
                     >
                       <RadioGroupItem value="PROFESSIONAL" id="professional" />
                       <div>
@@ -362,7 +363,14 @@ export function CaregiverForm() {
         )}
 
         <Button type="submit" className="w-full" size="lg" disabled={isPending}>
-          {isPending ? "Guardando..." : "Crear mi perfil →"}
+          {isPending ? (
+            <span className="flex items-center gap-2">
+              <Spinner className="h-4 w-4" />
+              Guardando...
+            </span>
+          ) : (
+            "Crear mi perfil →"
+          )}
         </Button>
       </form>
     </Form>

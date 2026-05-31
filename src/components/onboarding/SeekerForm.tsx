@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
+import { Spinner } from "@/components/ui/spinner"
 
 const schema = z.object({
   forSelf: z.boolean(),
@@ -111,7 +112,7 @@ export function SeekerForm() {
                   >
                     <label
                       htmlFor="for-self"
-                      className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:border-primary/50 transition-colors has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5"
+                      className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:border-primary/50 transition-colors has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5"
                     >
                       <RadioGroupItem value="self" id="for-self" />
                       <div>
@@ -123,7 +124,7 @@ export function SeekerForm() {
                     </label>
                     <label
                       htmlFor="for-other"
-                      className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:border-primary/50 transition-colors has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5"
+                      className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:border-primary/50 transition-colors has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5"
                     >
                       <RadioGroupItem value="other" id="for-other" />
                       <div>
@@ -356,7 +357,14 @@ export function SeekerForm() {
         )}
 
         <Button type="submit" className="w-full" size="lg" disabled={isPending}>
-          {isPending ? "Guardando..." : "Buscar cuidadores →"}
+          {isPending ? (
+            <span className="flex items-center gap-2">
+              <Spinner className="h-4 w-4" />
+              Guardando...
+            </span>
+          ) : (
+            "Buscar cuidadores →"
+          )}
         </Button>
       </form>
     </Form>

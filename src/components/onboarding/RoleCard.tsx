@@ -4,6 +4,7 @@ import { useTransition } from "react"
 import { Heart, HeartHandshake, CheckCircle2 } from "lucide-react"
 import { setUserRole } from "@/actions/user"
 import { Card, CardContent } from "@/components/ui/card"
+import { Spinner } from "@/components/ui/spinner"
 import { cn } from "@/lib/utils"
 
 interface RoleCardProps {
@@ -59,9 +60,10 @@ export function RoleCard({
                 <HeartHandshake className="w-6 h-6 text-primary" />
               )}
             </div>
-            {isSelected && (
+            {isSelected && !isPending && (
               <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
             )}
+            {isPending && <Spinner className="w-5 h-5 text-primary shrink-0" />}
           </div>
           <div className="space-y-1">
             <h2 className="font-semibold text-lg leading-tight">{title}</h2>
@@ -75,7 +77,10 @@ export function RoleCard({
             </p>
           )}
           {isPending && (
-            <p className="text-muted-foreground text-sm">Cargando...</p>
+            <p className="text-muted-foreground text-sm flex items-center gap-2">
+              <Spinner className="h-3 w-3" />
+              Cargando...
+            </p>
           )}
         </CardContent>
       </Card>
