@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  role      Role
+  createdAt DateTime @default(now())
+
+  seekerProfile    SeekerProfile?
+  caregiverProfile CaregiverProfile?
+  sentRequests     ContactRequest[]  @relation("SentRequests")
+  receivedRequests ContactRequest[]  @relation("ReceivedRequests")
+}
+
+enum Role {
+  SEEKER
+  CAREGIVER
+}
+
+model SeekerProfile {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  forSelf    Boolean
+  firstName  String
+  lastName   String
+  phone      String
+
+  elderFirstName  String?
+  elderLastName   String?
+  elderAge        Int?
+  elderCondition  String?
+
+  region String
+  comuna String
+}
+
+model CaregiverProfile {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  firstName   String
+  lastName    String
+  phone       String
+  photoUrl    String?
+  bio         String
+  profileType CaregiverType
+
+  title       String?
+  titleDocUrl String?
+
+  yearsExperience Int
+  availability    Availability
+  region          String
+  comuna          String
+
+  isVerified Boolean  @default(false)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+}
+
+enum CaregiverType {
+  PROFESSIONAL
+  EXPERIENCED
+}
+
+enum Availability {
+  FULL_TIME
+  PART_TIME
+  SHIFTS_24H
+}
+
+model ContactRequest {
+  id          String        @id @default(cuid())
+  seekerId    String
+  seeker      User          @relation("SentRequests", fields: [seekerId], references: [id])
+  caregiverId String
+  caregiver   User          @relation("ReceivedRequests", fields: [caregiverId], references: [id])
+
+  status    RequestStatus @default(PENDING)
+  message   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
