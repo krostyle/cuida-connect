@@ -287,17 +287,23 @@ export function CaregiverForm({ defaultFirstName = "", defaultLastName = "" }: C
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Selecciona tu disponibilidad" />
+                        {field.value ? (
+                          <span className="flex-1 text-left text-sm">
+                            {AVAILABILITY_LABELS[field.value as keyof typeof AVAILABILITY_LABELS]}
+                          </span>
+                        ) : (
+                          <span className="flex-1 text-left text-sm text-muted-foreground">
+                            Selecciona tu disponibilidad
+                          </span>
+                        )}
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {Object.entries(AVAILABILITY_LABELS).map(
-                        ([value, label]) => (
-                          <SelectItem key={value} value={value}>
-                            {label}
-                          </SelectItem>
-                        )
-                      )}
+                      {Object.entries(AVAILABILITY_LABELS).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />

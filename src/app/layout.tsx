@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Nunito } from "next/font/google"
 import { ClerkProvider } from "@clerk/nextjs"
+import "@/lib/zod-es" // configura mensajes de error de Zod en español
 import "./globals.css"
 
 const nunito = Nunito({

@@ -8,17 +8,23 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 const ALL = "ALL"
 
-export interface FeedFiltersValue {
-  region?: string
-  profileType?: string
-  availability?: string
+const PROFILE_TYPE_LABELS: Record<string, string> = {
+  ALL: "Cualquier tipo",
+  PROFESSIONAL: "Con título",
+  EXPERIENCED: "Con experiencia",
+}
+
+const AVAILABILITY_LABELS: Record<string, string> = {
+  ALL: "Cualquier disponibilidad",
+  FULL_TIME: "Jornada completa",
+  PART_TIME: "Medio tiempo",
+  SHIFTS_24H: "Turno 24 horas",
 }
 
 export function FeedFilters({ counts }: { counts: number }) {
@@ -47,12 +53,19 @@ export function FeedFilters({ counts }: { counts: number }) {
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap gap-2">
+        {/* Región — el valor ya es el nombre completo, no necesita mapeo */}
         <Select
           value={region}
           onValueChange={(v) => updateFilter("region", v ?? ALL)}
         >
           <SelectTrigger className="w-full sm:w-50">
-            <SelectValue placeholder="Todas las regiones" />
+            <span className="flex-1 text-left text-sm">
+              {region === ALL ? (
+                <span className="text-muted-foreground">Todas las regiones</span>
+              ) : (
+                region
+              )}
+            </span>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value={ALL}>Todas las regiones</SelectItem>
@@ -64,12 +77,19 @@ export function FeedFilters({ counts }: { counts: number }) {
           </SelectContent>
         </Select>
 
+        {/* Tipo de perfil */}
         <Select
           value={profileType}
           onValueChange={(v) => updateFilter("profileType", v ?? ALL)}
         >
           <SelectTrigger className="w-full sm:w-45">
-            <SelectValue placeholder="Cualquier tipo" />
+            <span className="flex-1 text-left text-sm">
+              {profileType === ALL ? (
+                <span className="text-muted-foreground">Cualquier tipo</span>
+              ) : (
+                PROFILE_TYPE_LABELS[profileType]
+              )}
+            </span>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value={ALL}>Cualquier tipo</SelectItem>
@@ -78,12 +98,21 @@ export function FeedFilters({ counts }: { counts: number }) {
           </SelectContent>
         </Select>
 
+        {/* Disponibilidad */}
         <Select
           value={availability}
           onValueChange={(v) => updateFilter("availability", v ?? ALL)}
         >
           <SelectTrigger className="w-full sm:w-50">
-            <SelectValue placeholder="Cualquier disponibilidad" />
+            <span className="flex-1 text-left text-sm">
+              {availability === ALL ? (
+                <span className="text-muted-foreground">
+                  Cualquier disponibilidad
+                </span>
+              ) : (
+                AVAILABILITY_LABELS[availability]
+              )}
+            </span>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value={ALL}>Cualquier disponibilidad</SelectItem>
