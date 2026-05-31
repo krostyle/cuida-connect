@@ -6,22 +6,22 @@ z.setErrorMap((issue) => {
       return { message: "Este campo es requerido" }
 
     case z.ZodIssueCode.too_small: {
-      const min = (issue as { minimum: number }).minimum
-      if (issue.type === "string") {
-        return min <= 1
+      const iss = issue as { minimum: number; origin: string }
+      if (iss.origin === "string") {
+        return iss.minimum <= 1
           ? { message: "Este campo es requerido" }
-          : { message: `Mínimo ${min} caracteres` }
+          : { message: `Mínimo ${iss.minimum} caracteres` }
       }
-      if (issue.type === "number") {
-        return { message: `El valor mínimo es ${min}` }
+      if (iss.origin === "number") {
+        return { message: `El valor mínimo es ${iss.minimum}` }
       }
-      return { message: `Mínimo ${min}` }
+      return { message: `Mínimo ${iss.minimum}` }
     }
 
     case z.ZodIssueCode.too_big: {
-      const max = (issue as { maximum: number }).maximum
-      if (issue.type === "string") return { message: `Máximo ${max} caracteres` }
-      return { message: `Máximo ${max}` }
+      const iss = issue as { maximum: number; origin: string }
+      if (iss.origin === "string") return { message: `Máximo ${iss.maximum} caracteres` }
+      return { message: `Máximo ${iss.maximum}` }
     }
 
     case z.ZodIssueCode.invalid_value:
