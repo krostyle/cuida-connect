@@ -290,7 +290,14 @@ export function SeekerForm({ defaultFirstName = "", defaultLastName = "" }: Seek
 
         {/* Ubicación */}
         <section className="space-y-4">
-          <h3 className="font-semibold text-base">Ubicación</h3>
+          <div className="space-y-1">
+            <h3 className="font-semibold text-base">
+              ¿En qué zona buscas cuidador?
+            </h3>
+            <p className="text-muted-foreground text-sm">
+              Indica dónde vive la persona que necesita cuidado.
+            </p>
+          </div>
           <div className="grid sm:grid-cols-2 gap-4">
             <FormField
               control={form.control}
