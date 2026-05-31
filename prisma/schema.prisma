@@ -66,6 +66,29 @@ model CaregiverProfile {
   isVerified Boolean  @default(false)
   isActive   Boolean  @default(true)
   createdAt  DateTime @default(now())
+
+  documents CaregiverDocument[]
+}
+
+model CaregiverDocument {
+  id        String       @id @default(cuid())
+  profileId String
+  profile   CaregiverProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  name      String
+  url       String
+  fileType  String       // "pdf" | "image"
+  docType   DocumentType
+
+  createdAt DateTime @default(now())
+}
+
+enum DocumentType {
+  TITLE
+  DIPLOMA
+  COURSE
+  CERTIFICATE
+  OTHER
 }
 
 enum CaregiverType {
