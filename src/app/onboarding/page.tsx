@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 import { getUserWithProfile } from "@/actions/user"
 import { RoleCard } from "@/components/onboarding/RoleCard"
+import type { Role } from "@/generated/prisma"
 
 export default async function OnboardingPage() {
   const { userId: clerkId } = await auth()
@@ -9,21 +10,25 @@ export default async function OnboardingPage() {
 
   const user = await getUserWithProfile(clerkId)
 
-  if (user) {
-    if (user.seekerProfile) redirect("/feed")
-    if (user.caregiverProfile) redirect("/dashboard")
-    if (user.role === "SEEKER") redirect("/onboarding/seeker")
-    if (user.role === "CAREGIVER") redirect("/onboarding/caregiver")
-  }
+  // Perfil ya completo → saltar al área correcta
+  if (user?.seekerProfile) redirect("/feed")
+  if (user?.caregiverProfile) redirect("/dashboard")
+
+  // Si tiene rol pero sin perfil → mostrar selección con su rol actual destacado
+  // (permite cambiar de rol antes de completar el formulario)
+  const currentRole: Role | null = user?.role ?? null
 
   return (
     <div className="space-y-8">
-      <div className="text-center space-y-2">
+      <div className="space-y-1">
+        <p className="text-sm text-muted-foreground font-medium">Paso 1 de 2</p>
         <h1 className="text-3xl font-bold tracking-tight">
-          ¡Bienvenido/a a CuidaConnect!
+          {currentRole ? "Cambia tu tipo de perfil" : "¡Bienvenido/a a CuidaConnect!"}
         </h1>
-        <p className="text-muted-foreground text-lg">
-          Cuéntanos cómo quieres usar la plataforma
+        <p className="text-muted-foreground">
+          {currentRole
+            ? "Selecciona el tipo de perfil que quieres crear"
+            : "¿Cómo quieres usar la plataforma?"}
         </p>
       </div>
 
@@ -33,12 +38,14 @@ export default async function OnboardingPage() {
           title="Busco un cuidador"
           description="Quiero encontrar un cuidador para mí o para un familiar adulto mayor"
           icon="heart"
+          isSelected={currentRole === "SEEKER"}
         />
         <RoleCard
           role="CAREGIVER"
           title="Soy cuidador"
           description="Ofrezco mis servicios de cuidado a adultos mayores"
           icon="hands"
+          isSelected={currentRole === "CAREGIVER"}
         />
       </div>
     </div>
