@@ -7,9 +7,9 @@ export type {
   CaregiverType,
   Availability,
   RequestStatus,
-} from "@/generated/prisma/client"
+} from "@/generated/prisma"
 
-import type { User, SeekerProfile, CaregiverProfile, ContactRequest } from "@/generated/prisma/client"
+import type { User, SeekerProfile, CaregiverProfile, ContactRequest } from "@/generated/prisma"
 
 export type CaregiverWithProfile = User & {
   caregiverProfile: CaregiverProfile

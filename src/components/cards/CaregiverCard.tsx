@@ -1,4 +1,4 @@
-import type { CaregiverProfile } from "@/generated/prisma/client"
+import type { CaregiverProfile } from "@/generated/prisma"
 
 interface CaregiverCardProps {
   profile: CaregiverProfile

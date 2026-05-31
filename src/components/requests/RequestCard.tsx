@@ -1,4 +1,4 @@
-import type { ContactRequest } from "@/generated/prisma/client"
+import type { ContactRequest } from "@/generated/prisma"
 
 interface RequestCardProps {
   request: ContactRequest

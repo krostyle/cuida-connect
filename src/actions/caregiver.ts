@@ -2,7 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server"
 import { prisma } from "@/lib/prisma"
-import type { CaregiverType, Availability } from "@/generated/prisma/client"
+import type { CaregiverType, Availability } from "@/generated/prisma"
 
 export interface CreateCaregiverProfileInput {
   firstName: string
