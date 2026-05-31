@@ -36,19 +36,25 @@ const AVAILABILITY_LABELS: Record<string, string> = {
 }
 
 const schema = z.object({
-  profileType: z.enum(["PROFESSIONAL", "EXPERIENCED"]),
+  profileType: z.enum(["PROFESSIONAL", "EXPERIENCED"], {
+    error: "Selecciona el tipo de perfil",
+  }),
   title: z.string().optional(),
-  firstName: z.string().min(2, "Mínimo 2 caracteres"),
-  lastName: z.string().min(2, "Mínimo 2 caracteres"),
-  phone: z.string().min(8, "Ingresa un teléfono válido"),
+  firstName: z.string({ error: "Este campo es requerido" }).min(2, "Mínimo 2 caracteres"),
+  lastName: z.string({ error: "Este campo es requerido" }).min(2, "Mínimo 2 caracteres"),
+  phone: z.string({ error: "Este campo es requerido" }).min(8, "Ingresa un teléfono válido"),
   bio: z
-    .string()
+    .string({ error: "Este campo es requerido" })
     .min(50, "Cuéntanos un poco más (mínimo 50 caracteres)")
     .max(500, "Máximo 500 caracteres"),
-  yearsExperience: z.string().min(1, "Indica tus años de experiencia"),
-  availability: z.enum(["FULL_TIME", "PART_TIME", "SHIFTS_24H"]),
-  region: z.string().min(1, "Selecciona una región"),
-  comuna: z.string().min(1, "Selecciona una comuna"),
+  yearsExperience: z
+    .string({ error: "Este campo es requerido" })
+    .min(1, "Indica tus años de experiencia"),
+  availability: z.enum(["FULL_TIME", "PART_TIME", "SHIFTS_24H"], {
+    error: "Selecciona tu disponibilidad",
+  }),
+  region: z.string({ error: "Selecciona una región" }).min(1, "Selecciona una región"),
+  comuna: z.string({ error: "Selecciona una comuna" }).min(1, "Selecciona una comuna"),
 })
 
 type FormValues = z.infer<typeof schema>

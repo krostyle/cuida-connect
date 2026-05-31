@@ -30,16 +30,16 @@ import { Separator } from "@/components/ui/separator"
 import { Spinner } from "@/components/ui/spinner"
 
 const schema = z.object({
-  forSelf: z.boolean(),
-  firstName: z.string().min(2, "Mínimo 2 caracteres"),
-  lastName: z.string().min(2, "Mínimo 2 caracteres"),
-  phone: z.string().min(8, "Ingresa un teléfono válido"),
+  forSelf: z.boolean({ error: "Selecciona una opción" }),
+  firstName: z.string({ error: "Este campo es requerido" }).min(2, "Mínimo 2 caracteres"),
+  lastName: z.string({ error: "Este campo es requerido" }).min(2, "Mínimo 2 caracteres"),
+  phone: z.string({ error: "Este campo es requerido" }).min(8, "Ingresa un teléfono válido"),
   elderFirstName: z.string().optional(),
   elderLastName: z.string().optional(),
   elderAge: z.string().optional(),
   elderCondition: z.string().max(500, "Máximo 500 caracteres").optional(),
-  region: z.string().min(1, "Selecciona una región"),
-  comuna: z.string().min(1, "Selecciona una comuna"),
+  region: z.string({ error: "Selecciona una región" }).min(1, "Selecciona una región"),
+  comuna: z.string({ error: "Selecciona una comuna" }).min(1, "Selecciona una comuna"),
 })
 
 type FormValues = z.infer<typeof schema>
