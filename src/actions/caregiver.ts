@@ -1,6 +1,7 @@
 "use server"
 
 import { auth } from "@clerk/nextjs/server"
+import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import type { CaregiverType, Availability } from "@/generated/prisma"
 
@@ -11,7 +12,6 @@ export interface CreateCaregiverProfileInput {
   bio: string
   profileType: CaregiverType
   title?: string
-  titleDocUrl?: string
   yearsExperience: number
   availability: Availability
   region: string
@@ -21,14 +21,20 @@ export interface CreateCaregiverProfileInput {
 
 export async function createCaregiverProfile(input: CreateCaregiverProfileInput) {
   const { userId: clerkId } = await auth()
-  if (!clerkId) throw new Error("No autenticado")
+  if (!clerkId) redirect("/sign-in")
 
   const user = await prisma.user.findUnique({ where: { clerkId } })
-  if (!user) throw new Error("Usuario no encontrado")
+  if (!user) throw new Error("Usuario no encontrado. Vuelve a /onboarding.")
 
-  return prisma.caregiverProfile.create({
-    data: { ...input, userId: user.id },
+  await prisma.caregiverProfile.create({
+    data: {
+      userId: user.id,
+      ...input,
+      title: input.profileType === "PROFESSIONAL" ? input.title : undefined,
+    },
   })
+
+  redirect("/dashboard")
 }
 
 export interface FeedFilters {
