@@ -59,6 +59,13 @@ export function SeekerForm({ defaultFirstName = "", defaultLastName = "" }: Seek
       forSelf: true,
       firstName: defaultFirstName,
       lastName: defaultLastName,
+      phone: "",
+      elderFirstName: "",
+      elderLastName: "",
+      elderAge: "",
+      elderCondition: "",
+      region: "",
+      comuna: "",
     },
   })
 
@@ -68,6 +75,18 @@ export function SeekerForm({ defaultFirstName = "", defaultLastName = "" }: Seek
     REGIONES_CHILE.find((r) => r.nombre === selectedRegion)?.comunas ?? []
 
   const onSubmit = (data: FormValues) => {
+    // Guard client-side para campos Select que pueden llegar undefined al servidor
+    let clientError = false
+    if (!data.region) {
+      form.setError("region", { message: "Selecciona una región" })
+      clientError = true
+    }
+    if (!data.comuna) {
+      form.setError("comuna", { message: "Selecciona una comuna" })
+      clientError = true
+    }
+    if (clientError) return
+
     setError(null)
     startTransition(async () => {
       try {
