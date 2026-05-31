@@ -95,9 +95,18 @@ export function CaregiverForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* Tipo de perfil */}
+        {/* ¿Tienes título formal? */}
         <section className="space-y-4">
-          <h3 className="font-semibold text-base">Tipo de perfil</h3>
+          <div className="space-y-1">
+            <h3 className="font-semibold text-base">
+              ¿Tienes título formal de salud?
+            </h3>
+            <p className="text-muted-foreground text-sm">
+              Ambas opciones son bienvenidas en CuidaConnect — la distinción
+              ayuda a las familias a encontrar el perfil que necesitan.
+            </p>
+          </div>
+
           <FormField
             control={form.control}
             name="profileType"
@@ -106,30 +115,35 @@ export function CaregiverForm() {
                 <FormControl>
                   <RadioGroup
                     value={field.value}
-                    onValueChange={field.onChange}
+                    onValueChange={(v) => {
+                      field.onChange(v)
+                      if (v === "EXPERIENCED") form.setValue("title", "")
+                    }}
                     className="flex flex-col gap-3"
                   >
                     <label
                       htmlFor="experienced"
-                      className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:border-primary/50 transition-colors has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5"
+                      className="flex items-start gap-3 rounded-lg border p-4 cursor-pointer hover:border-primary/50 transition-colors has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5"
                     >
-                      <RadioGroupItem value="EXPERIENCED" id="experienced" />
+                      <RadioGroupItem value="EXPERIENCED" id="experienced" className="mt-0.5 shrink-0" />
                       <div>
-                        <p className="font-medium">Con experiencia</p>
+                        <p className="font-medium">No tengo título formal</p>
                         <p className="text-muted-foreground text-sm">
-                          Tengo experiencia en el cuidado de adultos mayores
+                          Me desempeño como cuidador por vocación y/o
+                          experiencia práctica, sin certificación académica
                         </p>
                       </div>
                     </label>
                     <label
                       htmlFor="professional"
-                      className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:border-primary/50 transition-colors has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5"
+                      className="flex items-start gap-3 rounded-lg border p-4 cursor-pointer hover:border-primary/50 transition-colors has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5"
                     >
-                      <RadioGroupItem value="PROFESSIONAL" id="professional" />
+                      <RadioGroupItem value="PROFESSIONAL" id="professional" className="mt-0.5 shrink-0" />
                       <div>
-                        <p className="font-medium">Profesional con título</p>
+                        <p className="font-medium">Sí, tengo título de salud</p>
                         <p className="text-muted-foreground text-sm">
-                          TENS, Enfermero/a, Técnico en enfermería u otro
+                          TENS, Enfermero/a, Técnico en Enfermería, Terapeuta
+                          Ocupacional u otro título del área de la salud
                         </p>
                       </div>
                     </label>
@@ -139,13 +153,14 @@ export function CaregiverForm() {
               </FormItem>
             )}
           />
+
           {profileType === "PROFESSIONAL" && (
             <FormField
               control={form.control}
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Título profesional</FormLabel>
+                  <FormLabel>¿Cuál es tu título?</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Ej: TENS, Enfermero/a, Técnico en Enfermería"
